@@ -60,5 +60,7 @@ class OwnedSetsControllerTest < ActionDispatch::IntegrationTest
     assert_select "h1", "Combat Patrol"
     assert_select "p", /Progress: 20% complete/
     assert_select "li", /Bloodletter #1/
+    assert_operator @response.body.index("Bloodletter #9"), :<,
+                     @response.body.index("Bloodletter #10")
   end
 end

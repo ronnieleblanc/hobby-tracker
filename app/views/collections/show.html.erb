@@ -35,8 +35,34 @@
     <ul>
       <% miniatures.group_by(&:catalog_unit).each do |catalog_unit, unit_miniatures| %>
         <li>
-          <%= catalog_unit.name %> × <%= unit_miniatures.size %>
-          (<%= unit_miniatures.count(&:finished?) %> finished)
+          <details>
+            <summary>
+              <%= catalog_unit.name %> × <%= unit_miniatures.size %>
+              (<%= unit_miniatures.count(&:finished?) %> finished)
+            </summary>
+            <%= form_with url: collection_update_miniatures_status_path(@collection),
+                          method: :post do |form| %>
+              <%= form.hidden_field :catalog_unit_id, value: catalog_unit.id %>
+              <%= form.select :status, Miniature.statuses.keys.map { |status| [status.humanize, status] } %>
+              <%= form.submit "Update all" %>
+            <% end %>
+            <%= button_to "Remove all",
+                          collection_delete_miniatures_group_path(@collection),
+                          method: :delete,
+                          params: { catalog_unit_id: catalog_unit.id },
+                          data: { turbo_confirm: "Remove all #{catalog_unit.name} miniatures?" } %>
+            <ul>
+              <% unit_miniatures.each do |miniature| %>
+                <li><%= link_to miniature.name, collection_miniature_path(@collection, miniature) %>
+                  <%= form_with model: [@collection, miniature] do |form| %>
+                    <%= form.select :status,
+                                   Miniature.statuses.keys.map { |status| [status.humanize, status] } %>
+                    <%= form.submit "Save" %>
+                  <% end %>
+                </li>
+              <% end %>
+            </ul>
+          </details>
         </li>
       <% end %>
     </ul>

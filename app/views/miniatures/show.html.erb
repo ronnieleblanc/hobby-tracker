@@ -5,4 +5,8 @@
 <p>Status: <%= @miniature.status.humanize %></p>
 
 <%= link_to "Update status", edit_collection_miniature_path(@collection, @miniature) %>
+<% if @miniature.owned_set.nil? %>
+  <%= button_to "Remove miniature", [@collection, @miniature], method: :delete,
+                data: { turbo_confirm: "Remove this standalone miniature?" } %>
+<% end %>
 <%= link_to "Back to collection", @collection %>
