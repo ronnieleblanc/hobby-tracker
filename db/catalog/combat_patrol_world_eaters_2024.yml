@@ -1,0 +1,15 @@
+name: "Combat Patrol: World Eaters"
+variant: "2024"
+game_system: Warhammer 40,000
+faction_slug: world-eaters
+source_name: Element Games
+source_url: https://www.elementgames.co.uk/combat-patrol-world-eaters
+contents:
+  - name: Daemon Prince
+    quantity: 1
+  - name: Master of Executions
+    quantity: 1
+  - name: Khorne Berzerkers
+    quantity: 10
+  - name: Jakhals
+    quantity: 10

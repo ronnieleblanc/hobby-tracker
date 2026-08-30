@@ -1,0 +1,23 @@
+<% content_for :title, "Add Individual Models" %>
+
+<h1>Add individual models</h1>
+<p>Collection: <%= link_to @collection.name, @collection %></p>
+
+<%= form_with model: [@collection, @miniature] do |form| %>
+  <div>
+    <%= form.label :catalog_unit_id, "Model" %>
+    <%= form.collection_select :catalog_unit_id, @catalog_units, :id, :display_name,
+                               { prompt: "Choose a model" }, required: true %>
+  </div>
+
+  <div>
+    <%= form.label :quantity %>
+    <%= form.number_field :quantity, min: 1, required: true, value: 1 %>
+  </div>
+
+  <div>
+    <%= form.submit "Add models" %>
+  </div>
+<% end %>
+
+<%= link_to "Back to collection", @collection %>

@@ -1,0 +1,16 @@
+<% content_for :title, "Update #{@miniature.name}" %>
+
+<h1>Update <%= @miniature.name %></h1>
+
+<%= form_with model: [@collection, @miniature] do |form| %>
+  <div>
+    <%= form.label :status %>
+    <%= form.select :status, Miniature.statuses.keys.map { |status| [status.humanize, status] } %>
+  </div>
+
+  <div>
+    <%= form.submit "Save status" %>
+  </div>
+<% end %>
+
+<%= link_to "Back to miniature", [@collection, @miniature] %>

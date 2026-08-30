@@ -1,0 +1,46 @@
+<% content_for :title, @collection.name %>
+
+<h1><%= @collection.name %></h1>
+
+<%= link_to "Add a set", new_collection_owned_set_path(@collection) %>
+<%= link_to "Add individual models", new_collection_miniature_path(@collection) %>
+
+<h2>Progress</h2>
+<ul>
+  <% @collection.status_counts.each do |status, count| %>
+    <li><%= status.humanize %>: <%= count %></li>
+  <% end %>
+</ul>
+
+<h2>Owned sets</h2>
+<% if @owned_sets.any? %>
+  <ul>
+    <% @owned_sets.each do |owned_set| %>
+      <li>
+        <%= link_to owned_set.catalog_product.name,
+                    collection_owned_set_path(@collection, owned_set) %>
+        × <%= owned_set.quantity %>
+        (<%= owned_set.miniatures.count %> miniatures, <%= owned_set.progress_percentage %>% complete)
+      </li>
+    <% end %>
+  </ul>
+<% else %>
+  <p>No sets added yet.</p>
+<% end %>
+
+<h2>Standalone miniatures</h2>
+<% if @standalone_miniatures.any? %>
+  <% @standalone_miniatures.group_by { |miniature| miniature.catalog_unit.faction }.each do |faction, miniatures| %>
+    <h3><%= faction.name %></h3>
+    <ul>
+      <% miniatures.group_by(&:catalog_unit).each do |catalog_unit, unit_miniatures| %>
+        <li>
+          <%= catalog_unit.name %> × <%= unit_miniatures.size %>
+          (<%= unit_miniatures.count(&:finished?) %> finished)
+        </li>
+      <% end %>
+    </ul>
+  <% end %>
+<% else %>
+  <p>No standalone miniatures added yet.</p>
+<% end %>

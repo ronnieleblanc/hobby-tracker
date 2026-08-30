@@ -1,0 +1,8 @@
+<% content_for :title, @miniature.name %>
+
+<h1><%= @miniature.name %></h1>
+<p>Collection: <%= link_to @collection.name, @collection %></p>
+<p>Status: <%= @miniature.status.humanize %></p>
+
+<%= link_to "Update status", edit_collection_miniature_path(@collection, @miniature) %>
+<%= link_to "Back to collection", @collection %>

@@ -1,0 +1,13 @@
+<% content_for :title, "Collections" %>
+
+<h1>Collections</h1>
+
+<% if @collections.any? %>
+  <ul>
+    <% @collections.each do |collection| %>
+      <li><%= link_to collection.name, collection_path(collection) %></li>
+    <% end %>
+  </ul>
+<% else %>
+  <p>No collections yet.</p>
+<% end %>

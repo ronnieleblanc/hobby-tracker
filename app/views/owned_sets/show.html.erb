@@ -1,0 +1,38 @@
+<% content_for :title, @owned_set.catalog_product.name %>
+
+<h1><%= @owned_set.catalog_product.name %></h1>
+<p>Collection: <%= link_to @collection.name, @collection %></p>
+<p>Boxes owned: <%= @owned_set.quantity %></p>
+<p>Progress: <%= @owned_set.progress_percentage %>% complete</p>
+<%= button_to "Remove set", [@collection, @owned_set], method: :delete,
+              data: { turbo_confirm: "Remove this set and its miniatures?" } %>
+
+<%= form_with url: update_status_collection_owned_set_path(@collection, @owned_set),
+              method: :post do |form| %>
+  <%= form.label :status, "Update all miniatures" %>
+  <%= form.select :status, Miniature.statuses.keys.map { |status| [status.humanize, status] } %>
+  <%= form.submit "Update all" %>
+<% end %>
+
+<h2>Miniatures</h2>
+<% @miniature_groups.each do |catalog_product_model, miniatures| %>
+  <h3><%= catalog_product_model&.name || "Standalone miniatures" %></h3>
+  <%= form_with url: update_status_collection_owned_set_path(@collection, @owned_set),
+                method: :post do |form| %>
+    <%= form.hidden_field :catalog_product_model_id, value: catalog_product_model&.id %>
+    <%= form.select :status, Miniature.statuses.keys.map { |status| [status.humanize, status] } %>
+    <%= form.submit "Update group" %>
+  <% end %>
+  <ul>
+    <% miniatures.each do |miniature| %>
+      <li>
+        <%= link_to miniature.name, collection_miniature_path(@collection, miniature) %>
+        <%= form_with model: [@collection, miniature] do |form| %>
+          <%= form.select :status,
+                         Miniature.statuses.keys.map { |status| [status.humanize, status] } %>
+          <%= form.submit "Save" %>
+        <% end %>
+      </li>
+    <% end %>
+  </ul>
+<% end %>
