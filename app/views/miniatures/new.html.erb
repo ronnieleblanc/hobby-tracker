@@ -4,10 +4,30 @@
 <p>Collection: <%= link_to @collection.name, @collection %></p>
 
 <%= form_with model: [@collection, @miniature] do |form| %>
-  <div>
-    <%= form.label :catalog_unit_id, "Model" %>
-    <%= form.collection_select :catalog_unit_id, @catalog_units, :id, :display_name,
-                               { prompt: "Choose a model" }, required: true %>
+  <div class="catalog-combobox" data-controller="catalog-unit-combobox"
+       data-action="click@window->catalog-unit-combobox#closeOnOutside">
+    <%= form.label :catalog_unit_search, "Model" %>
+    <div class="catalog-combobox-input">
+      <%= form.text_field :catalog_unit_search, placeholder: "Search by faction or unit name",
+                          autocomplete: "off", role: "combobox",
+                          aria: { autocomplete: "list", expanded: "false",
+                                  controls: "catalog-unit-options" },
+                          data: { catalog_unit_combobox_target: "input",
+                                  action: "input->catalog-unit-combobox#filter keydown->catalog-unit-combobox#navigate focus->catalog-unit-combobox#open" } %>
+      <button type="button" aria-label="Clear model search"
+              data-action="click->catalog-unit-combobox#clear">Clear</button>
+    </div>
+    <%= form.hidden_field :catalog_unit_id,
+                         data: { catalog_unit_combobox_target: "hidden" } %>
+    <div id="catalog-unit-options" class="catalog-combobox-results"
+         role="listbox" data-catalog-unit-combobox-target="list" hidden>
+    </div>
+    <script type="application/json" data-catalog-unit-combobox-target="data">
+      <%= raw @catalog_units.map { |unit|
+        { id: unit.id, faction: unit.faction.name, name: unit.name }
+      }.to_json %>
+    </script>
+    <p data-catalog-unit-combobox-target="empty" hidden>No models match that search.</p>
   </div>
 
   <div>

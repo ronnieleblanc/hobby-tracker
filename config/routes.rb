@@ -4,7 +4,11 @@ Rails.application.routes.draw do
     resources :owned_sets, only: %i[show new create destroy] do
       post :update_status, on: :member
     end
-    resources :miniatures, only: %i[show edit update new create]
+    post "miniatures/update_status_group", to: "miniatures#update_status_group",
+         as: :update_miniatures_status
+    delete "miniatures/delete_group", to: "miniatures#destroy_group",
+           as: :delete_miniatures_group
+    resources :miniatures, only: %i[show edit update new create destroy]
   end
 
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html

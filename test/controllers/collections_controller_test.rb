@@ -22,6 +22,6 @@ class CollectionsControllerTest < ActionDispatch::IntegrationTest
 
     assert_response :success
     assert_select "h3", "World Eaters"
-    assert_select "li", /Jakhals × 1/
+    assert_select "summary", /Jakhals × 1/
   end
 end
