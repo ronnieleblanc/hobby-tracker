@@ -192,7 +192,21 @@ jobs:
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
-          bundler-cache: true
+          bundler-cache: false
+
+      - name: Install Ruby dependencies
+        run: |
+          bundle config set path vendor/bundle
+          bundle install --jobs 4
+
+      - name: Diagnose Bundler environment
+        run: |
+          ruby -e 'puts RUBY_PLATFORM'
+          ruby -v
+          bundle -v
+          bundle platform
+          bundle config list
+          bundle check
 
       - name: Run System Tests
         env:
