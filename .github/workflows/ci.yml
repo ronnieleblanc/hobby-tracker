@@ -16,14 +16,28 @@ jobs:
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
-          bundler-cache: true
+          bundler-cache: false
+
+      - name: Install Ruby dependencies
+        run: |
+          bundle config set path vendor/bundle
+          bundle install --jobs 4
+
+      - name: Diagnose Bundler environment
+        run: |
+          ruby -e 'puts RUBY_PLATFORM'
+          ruby -v
+          bundle -v
+          bundle platform
+          bundle config list
+          bundle check
 
       - name: Scan for common Rails security vulnerabilities using static analysis
         run: bin/brakeman --no-pager
-      
+
       - name: Scan for known security vulnerabilities in gems used
         run: bin/bundler-audit
-      
+
   scan_js:
     runs-on: ubuntu-latest
 
@@ -34,7 +48,21 @@ jobs:
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
-          bundler-cache: true
+          bundler-cache: false
+
+      - name: Install Ruby dependencies
+        run: |
+          bundle config set path vendor/bundle
+          bundle install --jobs 4
+
+      - name: Diagnose Bundler environment
+        run: |
+          ruby -e 'puts RUBY_PLATFORM'
+          ruby -v
+          bundle -v
+          bundle platform
+          bundle config list
+          bundle check
 
       - name: Scan for security vulnerabilities in JavaScript dependencies
         run: bin/importmap audit
@@ -50,7 +78,21 @@ jobs:
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
-          bundler-cache: true
+          bundler-cache: false
+
+      - name: Install Ruby dependencies
+        run: |
+          bundle config set path vendor/bundle
+          bundle install --jobs 4
+
+      - name: Diagnose Bundler environment
+        run: |
+          ruby -e 'puts RUBY_PLATFORM'
+          ruby -v
+          bundle -v
+          bundle platform
+          bundle config list
+          bundle check
 
       - name: Prepare RuboCop cache
         uses: actions/cache@v6
@@ -94,7 +136,21 @@ jobs:
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
-          bundler-cache: true
+          bundler-cache: false
+
+      - name: Install Ruby dependencies
+        run: |
+          bundle config set path vendor/bundle
+          bundle install --jobs 4
+
+      - name: Diagnose Bundler environment
+        run: |
+          ruby -e 'puts RUBY_PLATFORM'
+          ruby -v
+          bundle -v
+          bundle platform
+          bundle config list
+          bundle check
 
       - name: Run tests
         env:
